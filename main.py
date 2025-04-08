@@ -1,7 +1,8 @@
 from enum import IntEnum
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from typing import List, Optional
 from pydantic import  BaseModel, Field
+from api import api
 # audio filters declarations
 class GainCompModel(BaseModel):
     enabled: bool = Field(default=False)
@@ -64,30 +65,10 @@ class BaseVideo(BaseAudio):
 
 # Declaring endpoints
 app = FastAPI()
-# To get the video for streaming
-@app.get("/{video_id}")
-async def analyze_file(video_id: str):
-    # TODO : make the processed video stream on webpage
-    return ""
-# To upload a video into server
-@app.post("", status_code=201)
-async def upload_video():
-    #TODO : get a video/audio file from user
-    return ""
-# To delete a previously uploaded file
-@app.delete("/{video_id}")
-async def delete_video(video_id: str):
-    #TODO : delete the uploaded file
-    return ""
-# To get only the configs needed for the filters to apply
-@app.post("/{video_id}/configure")
-async def configure_filters(video_id: str):
-    #TODO : make the commands strings here for videos
-    #TODO : list the appropriate functions for audio
-    return ""
-# to apply the configured filters
-@app.post("/{video_id}/apply")
-async def apply_filters(video_id: str):
-    #TODO : apply the video and audio filters
-    return ""
+app.include_router(api.api_router)
+
+
+
+
+
 
