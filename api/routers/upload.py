@@ -2,7 +2,7 @@ from fastapi import APIRouter
 router = APIRouter()
 
 # To upload a video into server
-@router.post("", status_code=201)
+@router.post("/", status_code=201)
 async def upload_video():
     #TODO : get a video/audio file from user
     return ""
