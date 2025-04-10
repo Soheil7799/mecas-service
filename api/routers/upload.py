@@ -24,3 +24,14 @@ async def delete_video(file_name: str):
         return {"message": f"File {file_name} deleted successfully"}
     else:
         return {"message": f"File {file_name} not found"}
+
+@router.delete("/")
+async def delete_content():
+    directory_path = FILEPATH
+    files = os.listdir(directory_path)
+
+    for file in files:
+        file_path = f"{directory_path}/{file}"
+        os.remove(file_path)
+
+    return {"message" : "all uploaded files deleted"}
