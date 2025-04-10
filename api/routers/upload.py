@@ -7,6 +7,9 @@ FILEPATH = "./files/input"
 @router.post("/uploadfile/", status_code=201)
 async def upload_video(video_file: UploadFile = File(...)):
     #TODO : get a video/audio file from user
+    files = os.listdir(".")
+    if not files == []:
+        return {"message" : "first delete previously uploaded files"}
     file_type = video_file.content_type
     file_path = f"{FILEPATH}/{video_file.filename}"
     with open(file_path,"wb+") as file_object:
@@ -29,7 +32,8 @@ async def delete_video(file_name: str):
 async def delete_content():
     directory_path = FILEPATH
     files = os.listdir(directory_path)
-
+    if not files:
+        return {"message" : "no file detected"}
     for file in files:
         file_path = f"{directory_path}/{file}"
         os.remove(file_path)
