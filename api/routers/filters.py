@@ -1,5 +1,6 @@
 from filters.audio import *
 from filters.video import *
+from filters import utilies
 from fastapi import APIRouter
 import os
 from formatings.file import  BaseVideo
@@ -11,6 +12,7 @@ OUTPUTPATH = "./files/output"
 # To get only the configs needed for the filters and application
 @router.post("/application")
 async def configure_filters(req: BaseVideo):
+    file_name = ""
     # emptying temp and output directories for clean application
     # you can make a function out of this "remover code"
     directory_path = TEMPPATH
@@ -30,6 +32,8 @@ async def configure_filters(req: BaseVideo):
         os.remove(file_path)
     ####
     # calling the seperator function
+    input_base, _ = os.path.splitext(file_name)
+    temp_audio ,temp_video =  utilies.extract_audio(file_name, input_base)
 
 
     # calling the desired filters
@@ -53,7 +57,7 @@ async def configure_filters(req: BaseVideo):
         print("calling upscaling")
 
     # calling the merger function
-
+    utilies.merge(temp_audio,temp_video,file_name)
 
 
     return {req.grayScale.enabled}
