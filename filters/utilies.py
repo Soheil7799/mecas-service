@@ -6,8 +6,8 @@ def merge(audio_file , video_file , file_name):
         "ffmpeg",
         "-i", video_file,
         "-i", audio_file,
-        "-c:v", "copy",
-        "-c:a", "aac", # using aac instead of copy because i dont know if the final output will support wav format as audio
+        "-c:v", "copy",  # Copy video without re-encoding
+        "-c:a", "aac",  # Use AAC for audio in final file
         output_video
     ]
     result = subprocess.run(command)
