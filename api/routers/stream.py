@@ -31,7 +31,7 @@ MEDIA_TYPES = {
     ".m4a": "audio/mp4",
 }
 # To get the video for streaming
-@router.get("/")
+@router.get("/stream/")
 async def stream():
     # Done : make the processed video stream on webpage
     files = os.listdir(OUTPUT)
