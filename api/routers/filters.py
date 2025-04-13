@@ -12,7 +12,7 @@ OUTPUTPATH = "./files/output"
 # To get only the configs needed for the filters and application
 @router.post("/application")
 async def configure_filters(req: BaseVideo):
-    file_name = ""
+    file_name = req.fileName
     # emptying temp and output directories for clean application
     # you can make a function out of this "remover code"
     directory_path = TEMPPATH
