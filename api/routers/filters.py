@@ -1,5 +1,5 @@
 from filters.audio import *
-from filters.video import *
+import filters.video.video_filter_manager as vfm
 from filters import utilies
 from fastapi import APIRouter
 import os
@@ -49,15 +49,17 @@ async def configure_filters(req: BaseVideo):
         print("calling car like")
     if req.grayScale.enabled:
         print("calling gray scale")
+        vfm.apply_grayscale(file_name)
     if req.colorInvert.enabled:
         print("calling color invert")
+        vfm.apply_color_inversion(file_name)
     if req.frameTarget.enabled:
         print("calling frame interpolation")
+        vfm.apply_frame_interpolation(file_name,req.frameTarget.targetFPS)
     if req.upscalingTarget.enabled:
         print("calling upscaling")
+        vfm.apply_upscaling(file_name,req.upscalingTarget.width,req.upscalingTarget.height)
+
 
     # calling the merger function
     utilies.merge(temp_audio,temp_video,file_name)
-
-
-    return {req.grayScale.enabled}
