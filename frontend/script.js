@@ -1,5 +1,5 @@
 // Configuration for API endpoints
-const BASE_URL = "http://localhost:8000"; // Update with your actual backend URL
+const BASE_URL = window.location.origin;
 
 // Application state
 const appState = {
