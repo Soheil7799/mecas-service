@@ -4,25 +4,48 @@ import shutil
 
 router = APIRouter()
 FILEPATH = "./files/input"
+TEMPPATH = "./files/temp"
+OUTPUTPATH = "./files/output"
 
 
 # Create directories if they don't exist
 def ensure_directories():
     os.makedirs(FILEPATH, exist_ok=True)
-    os.makedirs("./files/temp", exist_ok=True)
-    os.makedirs("./files/output", exist_ok=True)
+    os.makedirs(TEMPPATH, exist_ok=True)
+    os.makedirs(OUTPUTPATH, exist_ok=True)
+
+
+def cleanup_directories():
+    """
+    Cleanup temporary and output directories
+    Remove all files in these directories
+    """
+    cleanup_dirs = [FILEPATH, TEMPPATH, OUTPUTPATH]
+
+    for directory in cleanup_dirs:
+        try:
+            # Ensure directory exists
+            os.makedirs(directory, exist_ok=True)
+
+            # List and remove all files
+            files = os.listdir(directory)
+            for file in files:
+                file_path = os.path.join(directory, file)
+                try:
+                    if os.path.isfile(file_path):
+                        os.unlink(file_path)
+                except Exception as e:
+                    print(f"Error deleting {file_path}: {e}")
+        except Exception as e:
+            print(f"Error cleaning directory {directory}: {e}")
 
 
 # To upload a video into server
 @router.post("/uploadfile/", status_code=201)
 async def upload_video(video_file: UploadFile = File(...)):
-    # Ensure directories exist
+    # Ensure directories exist and are cleaned
     ensure_directories()
-
-    # Check if we already have files
-    files = os.listdir(FILEPATH)
-    if files:
-        return {"message": "First delete previously uploaded files"}
+    cleanup_directories()
 
     # Get file type and build path
     file_path = os.path.join(FILEPATH, video_file.filename)
@@ -63,18 +86,5 @@ async def delete_video(file_name: str):
 @router.delete("/")
 async def delete_content():
     ensure_directories()
-    directory_path = FILEPATH
-    files = os.listdir(directory_path)
-
-    if not files:
-        return {"message": "No file detected"}
-
-    for file in files:
-        file_path = os.path.join(directory_path, file)
-        try:
-            if os.path.isfile(file_path):
-                os.remove(file_path)
-        except Exception as e:
-            print(f"Error deleting file {file}: {e}")
-
+    cleanup_directories()
     return {"message": "All uploaded files deleted"}
