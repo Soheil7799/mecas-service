@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>MECAS Service</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <h1>MECAS Service</h1>
+
+            <!-- File Upload Section -->
+            <div class="upload-container">
+                <h2>Upload Video</h2>
+                <div class="file-drop-area">
+                    <span class="file-message"
+                        >Choose or Drag and Drop File</span
+                    >
+                    <input
+                        type="file"
+                        id="fileUpload"
+                        accept=".mp4,.avi,.mov"
+                        class="file-input"
+                    />
+                </div>
+                <p class="help-text">
+                    Limit 200MB per file. Supported formats: MP4, AVI, MOV
+                </p>
+                <div id="uploadStatus" class="status-message"></div>
+            </div>
+
+            <!-- Filters Section (hidden initially) -->
+            <div id="filtersSection" class="hidden">
+                <!-- Audio Filters -->
+                <div class="filter-container">
+                    <h2>Audio Filters</h2>
+                    <div class="filter-group">
+                        <div class="filter-column">
+                            <!-- Gain Compressor Filter -->
+                            <div class="filter-item">
+                                <button
+                                    id="gainCompressorBtn"
+                                    class="toggle-btn"
+                                    data-active="false"
+                                >
+                                    ○ Gain Compressor
+                                </button>
+                                <div
+                                    id="gainCompressorControls"
+                                    class="filter-controls hidden"
+                                >
+                                    <div class="input-group">
+                                        <label for="gainCompressorThreshold"
+                                            >Compressor Threshold (dB)</label
+                                        >
+                                        <input
+                                            type="number"
+                                            id="gainCompressorThreshold"
+                                            value="-1"
+                                        />
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="limiterThreshold"
+                                            >Limiter Threshold (dB)</label
+                                        >
+                                        <input
+                                            type="number"
+                                            id="limiterThreshold"
+                                            value="0"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Voice Enhancement Filter -->
+                            <div class="filter-item">
+                                <button
+                                    id="voiceEnhanceBtn"
+                                    class="toggle-btn"
+                                    data-active="false"
+                                >
+                                    ○ Voice Enhancement
+                                </button>
+                                <div
+                                    id="voiceEnhanceControls"
+                                    class="filter-controls hidden"
+                                >
+                                    <div class="input-group">
+                                        <label for="preemphasisAlpha"
+                                            >Pre-emphasis Alpha</label
+                                        >
+                                        <input
+                                            type="number"
+                                            id="preemphasisAlpha"
+                                            value="3"
+                                        />
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="highPassOrder"
+                                            >High Pass Filter Order</label
+                                        >
+                                        <input
+                                            type="number"
+                                            id="highPassOrder"
+                                            value="2"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="filter-column">
+                            <!-- Denoise + Delay Filter -->
+                            <div class="filter-item">
+                                <button
+                                    id="denoiseDelayBtn"
+                                    class="toggle-btn"
+                                    data-active="false"
+                                >
+                                    ○ Denoise + Delay
+                                </button>
+                                <div
+                                    id="denoiseDelayControls"
+                                    class="filter-controls hidden"
+                                >
+                                    <div class="input-group">
+                                        <label for="noisePower"
+                                            >Noise Power (dB)</label
+                                        >
+                                        <input
+                                            type="number"
+                                            id="noisePower"
+                                            value="-15"
+                                            max="0"
+                                        />
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="delay">Delay (ms)</label>
+                                        <input
+                                            type="number"
+                                            id="delay"
+                                            value="100"
+                                        />
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="delayGain"
+                                            >Delay Gain (%)</label
+                                        >
+                                        <input
+                                            type="number"
+                                            id="delayGain"
+                                            value="50"
+                                            min="0"
+                                            max="100"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phone-like Filter -->
+                            <div class="filter-item">
+                                <button
+                                    id="phoneLikeBtn"
+                                    class="toggle-btn"
+                                    data-active="false"
+                                >
+                                    ○ Phone-like Filter
+                                </button>
+                                <div
+                                    id="phoneLikeControls"
+                                    class="filter-controls hidden"
+                                >
+                                    <div class="input-group">
+                                        <label for="phoneSideGain"
+                                            >Side Gain (0:mono,
+                                            1:original)</label
+                                        >
+                                        <input
+                                            type="number"
+                                            id="phoneSideGain"
+                                            value="0.0"
+                                            min="0.0"
+                                            max="1.0"
+                                            step="0.1"
+                                        />
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="phoneFilterOrder"
+                                            >Filter Order</label
+                                        >
+                                        <input
+                                            type="number"
+                                            id="phoneFilterOrder"
+                                            value="1"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Car-like Filter -->
+                            <div class="filter-item">
+                                <button
+                                    id="carLikeBtn"
+                                    class="toggle-btn"
+                                    data-active="false"
+                                >
+                                    ○ Car-like Filter
+                                </button>
+                                <div
+                                    id="carLikeControls"
+                                    class="filter-controls hidden"
+                                >
+                                    <div class="input-group">
+                                        <label for="carSideGain"
+                                            >Side Gain (dB)</label
+                                        >
+                                        <input
+                                            type="number"
+                                            id="carSideGain"
+                                            value="3"
+                                            min="0"
+                                        />
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="carFilterOrder"
+                                            >Filter Order</label
+                                        >
+                                        <input
+                                            type="number"
+                                            id="carFilterOrder"
+                                            value="1"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Filters -->
+                <div class="filter-container">
+                    <h2>Video Filters</h2>
+                    <div class="filter-group">
+                        <div class="filter-column">
+                            <!-- Grayscale Filter -->
+                            <div class="filter-item">
+                                <button
+                                    id="grayscaleBtn"
+                                    class="toggle-btn"
+                                    data-active="false"
+                                >
+                                    ○ Grayscale
+                                </button>
+                            </div>
+
+                            <!-- Color Invert Filter -->
+                            <div class="filter-item">
+                                <button
+                                    id="colorInvertBtn"
+                                    class="toggle-btn"
+                                    data-active="false"
+                                >
+                                    ○ Color Invert
+                                </button>
+                            </div>
+
+                            <!-- Frame Interpolation Filter -->
+                            <div class="filter-item">
+                                <button
+                                    id="frameInterpolateBtn"
+                                    class="toggle-btn"
+                                    data-active="false"
+                                >
+                                    ○ Frame Interpolation
+                                </button>
+                                <div
+                                    id="frameInterpolateControls"
+                                    class="filter-controls hidden"
+                                >
+                                    <div class="input-group">
+                                        <label for="frameTargetFps"
+                                            >Target FPS</label
+                                        >
+                                        <input
+                                            type="number"
+                                            id="frameTargetFps"
+                                            value="60"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="filter-column">
+                            <!-- Upscale Filter -->
+                            <div class="filter-item">
+                                <button
+                                    id="upscaleBtn"
+                                    class="toggle-btn"
+                                    data-active="false"
+                                >
+                                    ○ Upscale
+                                </button>
+                                <div
+                                    id="upscaleControls"
+                                    class="filter-controls hidden"
+                                >
+                                    <div class="input-group">
+                                        <label for="upscaleWidth"
+                                            >Target Width (pixels)</label
+                                        >
+                                        <input
+                                            type="number"
+                                            id="upscaleWidth"
+                                            value="1280"
+                                        />
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="upscaleHeight"
+                                            >Target Height (pixels)</label
+                                        >
+                                        <input
+                                            type="number"
+                                            id="upscaleHeight"
+                                            value="720"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Apply Filters Button -->
+                <button id="applyFiltersBtn" class="primary-btn">
+                    Apply Filters
+                </button>
+                <div id="applyStatus" class="status-message"></div>
+            </div>
+
+            <!-- Video Player Section -->
+            <div id="videoSection" class="hidden">
+                <h2>Processed Video</h2>
+                <div class="video-container">
+                    <video id="processedVideo" controls>
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+
+            <!-- Delete File Button -->
+            <div id="deleteSection" class="hidden">
+                <button id="deleteFileBtn" class="secondary-btn">
+                    Delete File
+                </button>
+                <div id="deleteStatus" class="status-message"></div>
+            </div>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+</html>
