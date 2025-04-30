@@ -28,3 +28,6 @@ output/
 
 # Logs
 *.log
+
+# Tester
+plotter.py
