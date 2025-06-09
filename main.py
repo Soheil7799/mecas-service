@@ -7,10 +7,9 @@ import api.api as api
 
 app = FastAPI()
 
-# Add CORS middleware with more specific origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For production, consider being more specific
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -19,7 +18,6 @@ app.add_middleware(
 # Declaring endpoints
 app.include_router(api.api_router)
 
-# Serve static assets from frontend directory
 app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 # Handle the root URL to serve your index.html
